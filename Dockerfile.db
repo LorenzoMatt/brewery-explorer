@@ -1,0 +1,16 @@
+FROM postgres:12
+
+# Set environment variables for PostgreSQL
+ENV POSTGRES_DB=${PG_DB}
+ENV POSTGRES_USER=${PG_USER}
+ENV POSTGRES_PASSWORD=${PG_PASSWORD}
+
+# Copy the init.sql to a temporary location
+COPY init.sql /tmp/init.sql
+
+# Copy the shell script to modify and move init.sql
+COPY init-db.sh /usr/local/bin/init-db.sh
+
+# Make the script executable and run it
+RUN chmod +x /usr/local/bin/init-db.sh
+ENTRYPOINT ["/usr/local/bin/init-db.sh"]

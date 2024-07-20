@@ -1,0 +1,27 @@
+# Version control
+.git/
+.gitignore
+
+# Node.js specific directories
+node_modules/
+dist/
+
+# Dependency directories
+npm-debug.log
+yarn-error.log
+
+# Logs and temporary files
+*.log
+**/.*
+
+# System files
+.DS_Store
+
+# IDE specific files
+.vscode/
+
+# Miscellaneous files
+.editorconfig
+README.md
+Dockerfile*
+.dockerignore

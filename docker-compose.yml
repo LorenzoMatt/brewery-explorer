@@ -1,0 +1,51 @@
+version: '3.9'
+
+services:
+  backend:
+    container_name: backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.backend
+    ports:
+      - "${BACKEND_PORT}:8080"
+      - "${DEBUG_PORT}:5005"
+    environment:
+      - PG_USER=${PG_USER}
+      - PG_PASSWORD=${PG_PASSWORD}
+      - DB_URL=${DB_URL}
+      - LOGGING_LEVEL_CONSOLE=${LOGGING_LEVEL_CONSOLE}
+      - LOGGING_LEVEL_ROOT=${LOGGING_LEVEL_ROOT}
+      - LOG_DIRECTORY=${LOG_DIRECTORY}
+      - BACKEND_PORT=${BACKEND_PORT}
+      - DEBUG_PORT=${DEBUG_PORT}
+      - DB_SCHEMA=${DB_SCHEMA}
+    volumes:
+      - ${LOG_DIRECTORY}:${LOG_DIRECTORY}
+    depends_on:
+      - db
+  db:
+    container_name: db
+    build:
+      context: .
+      dockerfile: Dockerfile.db
+    ports:
+      - "${DB_PORT}:5432"
+    environment:
+      - POSTGRES_USER=${PG_USER}
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+      - POSTGRES_DB=${PG_DB}
+      - DB_SCHEMA=${DB_SCHEMA}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata: {}

@@ -1,0 +1,30 @@
+# Version control
+.git/
+.gitignore
+
+# Maven build directories
+target/
+build/
+
+# Maven wrapper
+mvnw
+mvnw.cmd
+
+# Dependency directories
+.mvn/
+
+# Logs and temporary files
+*.log
+*.class
+**/.*
+
+# System files
+.DS_Store
+
+# IDE specific files
+.vscode/
+
+# Miscellaneous files
+README.md
+Dockerfile*
+.dockerignore
