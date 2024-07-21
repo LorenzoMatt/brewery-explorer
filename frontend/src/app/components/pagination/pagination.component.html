@@ -1,0 +1,19 @@
+<nav aria-label="Page navigation">
+  <ul class="pagination">
+    <li class="page-item">
+      <button class="page-link" (click)="onPrevious()" [disabled]="page <= 1"
+        [class.disabled]="page <= 1">Previous</button>
+    </li>
+    <li class="page-item">
+      <span class="page-link">Page {{ page }}</span>
+    </li>
+    <li class="page-item">
+      <button class="page-link" (click)="onNext()" [disabled]="!hasMore" [class.disabled]="!hasMore">Next</button>
+    </li>
+    <li class="page-item">
+      <select class="page-link" (change)="onPageSizeChange($event)">
+        <option *ngFor="let size of [10, 20, 50, 100]" [value]="size">{{size}}</option>
+      </select>
+    </li>
+  </ul>
+</nav>
