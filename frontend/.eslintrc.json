@@ -56,7 +56,8 @@
                     {
                         "type": "element",
                         "prefix": "app",
-                        "style": "kebab-case"
+                        "style": "kebab-case",
+                        "endOfLine": "lf"
                     }
                 ],
                 // Prettier rule
