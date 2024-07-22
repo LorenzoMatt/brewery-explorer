@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Service
 public class BreweryService {
 
-    private static final Logger logger = LoggerFactory.getLogger(BreweryService.class);
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final String apiUrl;
 
@@ -40,9 +40,7 @@ public class BreweryService {
             logger.info("Found {} breweries for page: {}, size: {}", breweries.length, page, size);
         }
 
-        return Arrays.stream(breweries != null ? breweries : new BreweryApiResponse[0])
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+        return Arrays.stream(breweries != null ? breweries : new BreweryApiResponse[0]).map(this::convertToDto).collect(Collectors.toList());
     }
 
     @Cacheable("brewery")
@@ -76,19 +74,22 @@ public class BreweryService {
         }
 
         if (city != null && !city.trim().isEmpty()) {
-            if (hasQueryParam) url.append("&");
+            if (hasQueryParam)
+                url.append("&");
             url.append("by_city=").append(URLEncoder.encode(city, StandardCharsets.UTF_8));
             hasQueryParam = true;
         }
 
         if (state != null && !state.trim().isEmpty()) {
-            if (hasQueryParam) url.append("&");
+            if (hasQueryParam)
+                url.append("&");
             url.append("by_state=").append(URLEncoder.encode(state, StandardCharsets.UTF_8));
             hasQueryParam = true;
         }
 
         if (breweryType != null && !breweryType.trim().isEmpty()) {
-            if (hasQueryParam) url.append("&");
+            if (hasQueryParam)
+                url.append("&");
             url.append("by_type=").append(URLEncoder.encode(breweryType, StandardCharsets.UTF_8));
         }
 
@@ -100,9 +101,7 @@ public class BreweryService {
             logger.info("Found {} breweries for search criteria - name: {}, city: {}, state: {}, type: {}", breweries.length, name, city, state, breweryType);
         }
 
-        return Arrays.stream(breweries != null ? breweries : new BreweryApiResponse[0])
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+        return Arrays.stream(breweries != null ? breweries : new BreweryApiResponse[0]).map(this::convertToDto).collect(Collectors.toList());
     }
 
     private BreweryDto convertToDto(BreweryApiResponse apiResponse) {
