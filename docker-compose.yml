@@ -7,7 +7,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile.backend
     ports:
-      - "${BACKEND_PORT}:8080"
+      - "8080:8080"
       - "${DEBUG_PORT}:5005"
     environment:
       - PG_USER=${PG_USER}
@@ -16,7 +16,6 @@ services:
       - LOGGING_LEVEL_CONSOLE=${LOGGING_LEVEL_CONSOLE}
       - LOGGING_LEVEL_ROOT=${LOGGING_LEVEL_ROOT}
       - LOG_DIRECTORY=${LOG_DIRECTORY}
-      - BACKEND_PORT=${BACKEND_PORT}
       - DEBUG_PORT=${DEBUG_PORT}
       - DB_SCHEMA=${DB_SCHEMA}
     volumes:
