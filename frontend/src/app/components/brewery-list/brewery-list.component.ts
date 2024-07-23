@@ -18,7 +18,6 @@ export class BreweryListComponent {
     }
 
     onAddFavorite(breweryId: string) {
-        debugger;
         if (this.isFavorite(breweryId)) {
             this.removeFavorite.emit(breweryId);
         } else {

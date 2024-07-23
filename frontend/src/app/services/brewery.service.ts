@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { BreweryType } from '../models/brewery-type.enum';
 import { Brewery } from '../models/brewery.model';
 
 @Injectable({
@@ -47,5 +48,26 @@ export class BreweryService {
                 params: { breweryId },
             }
         );
+    }
+
+    filterBreweries(
+        city: string,
+        state: string,
+        breweryType: BreweryType | null
+    ): Observable<Brewery[]> {
+        let params = new HttpParams();
+        if (city) params = params.set('city', city);
+        if (state) params = params.set('state', state);
+        if (breweryType) params = params.set('breweryType', breweryType);
+        return this.http.get<Brewery[]>(`${this.apiUrl}/breweries/search`, {
+            params,
+        });
+    }
+
+    searchBreweries(name: string): Observable<Brewery[]> {
+        let params = new HttpParams().set('name', name);
+        return this.http.get<Brewery[]>(`${this.apiUrl}/breweries/search`, {
+            params,
+        });
     }
 }

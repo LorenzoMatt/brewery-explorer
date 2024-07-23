@@ -1,4 +1,4 @@
-import { BreweryType } from './brewery-type';
+import { BreweryType } from './brewery-type.enum';
 
 export interface Brewery {
     id: string;

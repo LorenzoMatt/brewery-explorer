@@ -14,6 +14,7 @@ import { FavoritesComponent } from './pages/favorites/favorites.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
+import { SearchBreweriesComponent } from './pages/search-breweries/search-breweries.component';
 import { AuthInterceptor } from './services/auth.interceptor';
 import { AuthService } from './services/auth.service';
 import { BreweryService } from './services/brewery.service';
@@ -30,6 +31,7 @@ import { BreweryService } from './services/brewery.service';
         FooterComponent,
         BreweryDetailComponent,
         FavoritesComponent,
+        SearchBreweriesComponent,
     ],
     imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
     providers: [

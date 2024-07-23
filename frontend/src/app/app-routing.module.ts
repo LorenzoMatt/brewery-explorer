@@ -6,9 +6,10 @@ import { FavoritesComponent } from './pages/favorites/favorites.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
+import { SearchBreweriesComponent } from './pages/search-breweries/search-breweries.component';
 
 const routes: Routes = [
-    { path: '', component: HomeComponent },
+    { path: '', component: HomeComponent, canActivate: [AuthGuard] },
     {
         path: 'brewery/:id',
         component: BreweryDetailComponent,
@@ -19,6 +20,19 @@ const routes: Routes = [
     {
         path: 'favorites',
         component: FavoritesComponent,
+        canActivate: [AuthGuard],
+    },
+
+    {
+        path: 'search-name',
+        component: SearchBreweriesComponent,
+        data: { searchType: 'name' },
+        canActivate: [AuthGuard],
+    },
+    {
+        path: 'search-criteria',
+        component: SearchBreweriesComponent,
+        data: { searchType: 'criteria' },
         canActivate: [AuthGuard],
     },
     { path: '**', redirectTo: '' },
