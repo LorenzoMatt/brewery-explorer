@@ -53,7 +53,7 @@ public class FavoriteController {
     @Operation(summary = "Get list of favorite brewery IDs for a user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Favorite IDs retrieved successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content) })
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))) })
     @GetMapping("/ids")
     public ResponseEntity<List<String>> getUserFavoriteIds(@AuthenticationPrincipal UserDetails userDetails) {
         List<String> favoriteIds = favoriteService.getUserFavoriteIds(userDetails.getUsername());

@@ -1,8 +1,9 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Brewery } from 'src/app/models/brewery.model';
-import { BreweryService } from 'src/app/services/brewery.service';
+import { Brewery } from '../../models/brewery.model';
+import { BreweryService } from '../../services/brewery.service';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
     selector: 'app-brewery-detail',
@@ -10,20 +11,29 @@ import { BreweryService } from 'src/app/services/brewery.service';
     styleUrls: ['./brewery-detail.component.css'],
 })
 export class BreweryDetailComponent implements OnInit {
-    brewery: Brewery | undefined;
+    brewery: Brewery | null = null;
 
     constructor(
         private route: ActivatedRoute,
         private breweryService: BreweryService,
-        private location: Location
+        private location: Location,
+        private notificationService: NotificationService
     ) {}
 
     ngOnInit() {
         const id = this.route.snapshot.paramMap.get('id');
         if (id) {
-            this.breweryService.getBreweryById(id).subscribe((brewery) => {
-                this.brewery = brewery;
-            });
+            this.breweryService.getBreweryById(id).subscribe(
+                (data) => {
+                    this.brewery = data;
+                },
+                (error) => {
+                    this.notificationService.showError(
+                        'Error fetching brewery details'
+                    );
+                    console.error(error);
+                }
+            );
         }
     }
 

@@ -22,3 +22,71 @@ header nav a {
 header nav a:hover {
   text-decoration: underline;
 }
+
+#notification {
+  visibility: hidden;
+  min-width: 250px;
+  margin-left: -125px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  bottom: 30px;
+  font-size: 17px;
+  box-shadow: 0 3px 5px rgb(0 0 0 / 30%);
+}
+
+#notification.show {
+  visibility: visible;
+  animation:
+    fadein 0.5s,
+    fadeout 0.5s 2.5s;
+}
+
+#notification.success {
+  background-color: #4caf50;
+}
+
+#notification.error {
+  background-color: #f44336;
+}
+
+@keyframes fadein {
+  from {
+    bottom: 0;
+    opacity: 0;
+  }
+
+  to {
+    bottom: 30px;
+    opacity: 1;
+  }
+}
+
+@keyframes fadeout {
+  from {
+    bottom: 30px;
+    opacity: 1;
+  }
+
+  to {
+    bottom: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes fadeout {
+  from {
+    bottom: 30px;
+    opacity: 1;
+  }
+
+  to {
+    bottom: 0;
+    opacity: 0;
+  }
+}
