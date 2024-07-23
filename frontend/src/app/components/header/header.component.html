@@ -1,10 +1,17 @@
 <header>
-  <nav aria-label="Main Navigation">
-    <ul>
+  <nav aria-label="Main Navigation" class="navbar">
+    <div class="navbar-brand">
+      <a routerLink="/" aria-label="Home Page">BreweryApp</a>
+    </div>
+    <ul class="navbar-nav">
       <li><a routerLink="/" aria-label="Home Page">Home</a></li>
       <li><a routerLink="/favorites" aria-label="Favorites Page">Favorites</a></li>
       <li><a routerLink="/search-name" aria-label="Search by Name">Search by Name</a></li>
       <li><a routerLink="/search-criteria" aria-label="Filter Breweries">Filter Breweries</a></li>
+    </ul>
+    <ul class="navbar-auth">
+      <li><a routerLink="/login" aria-label="Login">Login</a></li>
+      <li><a routerLink="/register" aria-label="Register">Register</a></li>
     </ul>
   </nav>
 </header>
