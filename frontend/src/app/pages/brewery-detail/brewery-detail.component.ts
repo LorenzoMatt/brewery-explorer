@@ -1,5 +1,6 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Brewery } from 'src/app/models/brewery.model';
 import { BreweryService } from 'src/app/services/brewery.service';
 
@@ -14,7 +15,7 @@ export class BreweryDetailComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private breweryService: BreweryService,
-        private router: Router
+        private location: Location
     ) {}
 
     ngOnInit() {
@@ -27,6 +28,6 @@ export class BreweryDetailComponent implements OnInit {
     }
 
     goBack() {
-        this.router.navigate(['/']);
+        this.location.back();
     }
 }
