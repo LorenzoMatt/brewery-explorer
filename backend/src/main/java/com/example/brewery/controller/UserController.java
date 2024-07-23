@@ -11,14 +11,17 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/users")
@@ -37,28 +40,46 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
 
     @Operation(summary = "Register a new user")
-    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "User registered successfully"),
-            @ApiResponse(responseCode = "400", description = "User already exists", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))) })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User registered successfully"),
+            @ApiResponse(responseCode = "400", description = "User already exists", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<?> registerUser(@RequestBody UserDto userDto, HttpServletRequest request) {
         if (customUserDetailsService.userExists(userDto.getUsername())) {
-            return ResponseEntity.badRequest().body("User already exists");
+            ErrorResponse errorResponse = new ErrorResponse(
+                    LocalDateTime.now(),
+                    HttpStatus.BAD_REQUEST.value(),
+                    "USER_EXISTS",
+                    "User already exists",
+                    request.getRequestURI()
+            );
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
 
         userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
         customUserDetailsService.saveUser(userDto);
-        return ResponseEntity.ok("User registered successfully");
+        return ResponseEntity.ok("{\"message\": \"User registered successfully\"}");
     }
 
     @Operation(summary = "Login user")
-    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "User logged in successfully"),
-            @ApiResponse(responseCode = "401", description = "Invalid username or password", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))) })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User logged in successfully"),
+            @ApiResponse(responseCode = "401", description = "Invalid username or password", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponseDto> loginUser(@RequestBody AuthenticationRequestDto authenticationRequest) throws Exception {
+    public ResponseEntity<?> loginUser(@RequestBody AuthenticationRequestDto authenticationRequest, HttpServletRequest request) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword()));
         } catch (Exception e) {
-            throw new Exception("Invalid username or password", e);
+            ErrorResponse errorResponse = new ErrorResponse(
+                    LocalDateTime.now(),
+                    HttpStatus.UNAUTHORIZED.value(),
+                    "INVALID_CREDENTIALS",
+                    "Invalid username or password",
+                    request.getRequestURI()
+            );
+            return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
         }
 
         final UserDetails userDetails = customUserDetailsService.loadUserByUsername(authenticationRequest.getUsername());
@@ -73,14 +94,22 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Token refreshed successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AuthenticationResponseDto.class))),
             @ApiResponse(responseCode = "400", description = "Invalid token", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))) })
-    public ResponseEntity<?> refreshToken(@RequestBody String token) {
+            @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    public ResponseEntity<?> refreshToken(@RequestBody String token, HttpServletRequest request) {
         try {
             String refreshedToken = jwtTokenUtil.refreshToken(token);
             long expiration = jwtTokenUtil.getExpirationDateFromToken(refreshedToken).getTime();
             return ResponseEntity.ok(new AuthenticationResponseDto(refreshedToken, expiration));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Invalid token");
+            ErrorResponse errorResponse = new ErrorResponse(
+                    LocalDateTime.now(),
+                    HttpStatus.BAD_REQUEST.value(),
+                    "INVALID_TOKEN",
+                    "Invalid token",
+                    request.getRequestURI()
+            );
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
     }
 }
