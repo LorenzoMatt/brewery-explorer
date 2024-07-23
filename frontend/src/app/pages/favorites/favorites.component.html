@@ -1,3 +1,5 @@
 <main class='container'>
-  <app-brewery-list [breweries]="breweries" (brewerySelected)="onBrewerySelected($event)"></app-brewery-list>
+  <app-brewery-list [favoriteIdsSet]="favoriteIdsSet" [breweries]="breweries"
+    (brewerySelected)="onBrewerySelected($event)" (addFavorite)="onAddFavorite($event)"
+    (removeFavorite)="onRemoveFavorite($event)"></app-brewery-list>
 </main>

@@ -10,6 +10,7 @@ import { BreweryService } from '../../services/brewery.service';
 })
 export class FavoritesComponent implements OnInit {
     breweries: Brewery[] = [];
+    favoriteIdsSet: Set<string> = new Set<string>();
 
     constructor(
         private breweryService: BreweryService,
@@ -23,7 +24,28 @@ export class FavoritesComponent implements OnInit {
     loadFavorites() {
         this.breweryService.getUserFavorites().subscribe((data) => {
             this.breweries = data;
+            this.favoriteIdsSet = new Set(data.map((b) => b.id));
         });
+    }
+
+    isFavorite(breweryId: string): boolean {
+        return this.favoriteIdsSet.has(breweryId);
+    }
+
+    onAddFavorite(breweryId: string) {
+        if (!this.isFavorite(breweryId)) {
+            this.breweryService.addFavorite(breweryId).subscribe(() => {
+                this.favoriteIdsSet.add(breweryId);
+            });
+        }
+    }
+
+    onRemoveFavorite(breweryId: string) {
+        if (this.isFavorite(breweryId)) {
+            this.breweryService.removeFavorite(breweryId).subscribe(() => {
+                this.favoriteIdsSet.delete(breweryId);
+            });
+        }
     }
 
     onBrewerySelected(id: string) {

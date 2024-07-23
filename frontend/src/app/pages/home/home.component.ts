@@ -10,6 +10,7 @@ import { BreweryService } from '../../services/brewery.service';
 })
 export class HomeComponent implements OnInit {
     breweries: Brewery[] = [];
+    favoriteIdsSet: Set<string> = new Set<string>();
     page = 1;
     pageSize = 10;
 
@@ -20,6 +21,7 @@ export class HomeComponent implements OnInit {
 
     ngOnInit() {
         this.loadBreweries();
+        this.loadFavoriteIds();
     }
 
     loadBreweries() {
@@ -28,6 +30,12 @@ export class HomeComponent implements OnInit {
             .subscribe((data) => {
                 this.breweries = data;
             });
+    }
+
+    loadFavoriteIds() {
+        this.breweryService.getUserFavoriteIds().subscribe((ids) => {
+            this.favoriteIdsSet = new Set(ids);
+        });
     }
 
     onPageChange(page: number) {
@@ -43,5 +51,21 @@ export class HomeComponent implements OnInit {
 
     onBrewerySelected(id: string) {
         this.router.navigate(['/brewery', id]);
+    }
+
+    onAddFavorite(breweryId: string) {
+        if (this.favoriteIdsSet.has(breweryId)) {
+            this.breweryService.removeFavorite(breweryId).subscribe(() => {
+                this.favoriteIdsSet.delete(breweryId);
+            });
+        } else {
+            this.breweryService.addFavorite(breweryId).subscribe(() => {
+                this.favoriteIdsSet.add(breweryId);
+            });
+        }
+    }
+
+    isFavorite(breweryId: string): boolean {
+        return this.favoriteIdsSet.has(breweryId);
     }
 }

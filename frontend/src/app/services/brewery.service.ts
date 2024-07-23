@@ -25,4 +25,27 @@ export class BreweryService {
     getUserFavorites(): Observable<Brewery[]> {
         return this.http.get<Brewery[]>(`${this.apiUrl}/favorites`);
     }
+
+    getUserFavoriteIds(): Observable<string[]> {
+        return this.http.get<string[]>(`${environment.apiUrl}/favorites/ids`);
+    }
+
+    addFavorite(breweryId: string): Observable<void> {
+        return this.http.post<void>(
+            `${environment.apiUrl}/favorites/add`,
+            null,
+            {
+                params: { breweryId },
+            }
+        );
+    }
+
+    removeFavorite(breweryId: string): Observable<void> {
+        return this.http.delete<void>(
+            `${environment.apiUrl}/favorites/remove`,
+            {
+                params: { breweryId },
+            }
+        );
+    }
 }

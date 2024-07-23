@@ -34,6 +34,15 @@
   gap: 0.5rem;
 }
 
+.details-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
 .brewery-card .buttons button {
   padding: 0.5rem 1rem;
   border: none;
@@ -48,4 +57,26 @@
 
 .brewery-card .buttons .favorites-btn {
   background-color: #32cd32;
+}
+
+.add-favorite-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.remove-favorite-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.add-favorite-btn:disabled,
+.remove-favorite-btn:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
 }

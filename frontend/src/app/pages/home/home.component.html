@@ -3,5 +3,8 @@
     (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)">
   </app-pagination>
 
-  <app-brewery-list [breweries]="breweries" (brewerySelected)="onBrewerySelected($event)"></app-brewery-list>
+  <app-brewery-list [breweries]="breweries" [favoriteIdsSet]="favoriteIdsSet"
+    (brewerySelected)="onBrewerySelected($event)" (addFavorite)="onAddFavorite($event)"
+    (removeFavorite)="onAddFavorite($event)">
+  </app-brewery-list>
 </main>
