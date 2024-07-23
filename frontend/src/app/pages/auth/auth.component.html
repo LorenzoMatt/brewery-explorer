@@ -1,4 +1,4 @@
-<div class="auth-container">
+<main class="auth-container">
   <h2>{{ isLogin ? 'Login' : 'Register' }}</h2>
   <form (submit)="onSubmit()">
     <div class="form-group">
@@ -9,11 +9,13 @@
       <label for="password">Password</label>
       <input type="password" id="password" [(ngModel)]="user.password" name="password" required>
     </div>
-    <button type="submit" class="btn">{{ isLogin ? 'Login' : 'Register' }}</button>
+    <button type="submit" class="btn" [disabled]="!user.username || !user.password">
+      {{ isLogin ? 'Login' : 'Register' }}
+    </button>
     <div class="success" *ngIf="successMessage">{{ successMessage }}</div>
     <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
   </form>
   <div class="toggle" (click)="toggleAuth()">
     {{ isLogin ? 'Don\'t have an account? Register' : 'Already have an account? Login' }}
   </div>
-</div>
+</main>

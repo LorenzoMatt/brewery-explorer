@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
     selector: 'app-auth',
@@ -16,14 +17,17 @@ export class AuthComponent {
 
     constructor(
         private authService: AuthService,
-        private router: Router
+        private router: Router,
+        private notificationService: NotificationService
     ) {}
 
     onSubmit() {
         if (this.isLogin) {
             this.authService.login(this.user).subscribe(
-                (response) => {
-                    this.successMessage = 'Logged in successfully!';
+                () => {
+                    this.notificationService.showSuccess(
+                        'Logged in successfully!'
+                    );
                     this.router.navigate(['/']);
                 },
                 (error) => {
@@ -32,7 +36,7 @@ export class AuthComponent {
             );
         } else {
             this.authService.register(this.user).subscribe(
-                (response) => {
+                () => {
                     this.successMessage = 'Registered successfully!';
                     this.toggleAuth();
                 },

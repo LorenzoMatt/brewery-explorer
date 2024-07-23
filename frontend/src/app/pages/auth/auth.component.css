@@ -40,7 +40,12 @@ input {
   font-size: 16px;
 }
 
-.btn:hover {
+.btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.btn:hover:not(:disabled) {
   background-color: #0056b3;
 }
 
