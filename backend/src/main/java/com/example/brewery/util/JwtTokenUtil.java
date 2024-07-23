@@ -59,4 +59,15 @@ public class JwtTokenUtil {
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
     }
+
+    public String refreshToken(String token) {
+        final Claims claims = getAllClaimsFromToken(token);
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(claims.getSubject())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(SignatureAlgorithm.HS512, secretKey)
+                .compact();
+    }
 }
