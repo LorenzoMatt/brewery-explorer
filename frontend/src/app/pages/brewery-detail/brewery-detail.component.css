@@ -1,0 +1,44 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.brewery-detail {
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+.brewery-detail h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.brewery-detail p {
+  margin: 0.5rem 0;
+}
+
+.brewery-detail a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.brewery-detail a:hover {
+  text-decoration: underline;
+}
+
+button {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}

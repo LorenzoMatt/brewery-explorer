@@ -14,6 +14,7 @@ import { RegisterComponent } from './pages/register/register.component';
 import { AuthInterceptor } from './services/auth.interceptor';
 import { AuthService } from './services/auth.service';
 import { BreweryService } from './services/brewery.service';
+import { BreweryDetailComponent } from './pages/brewery-detail/brewery-detail.component';
 
 @NgModule({
     declarations: [
@@ -25,6 +26,7 @@ import { BreweryService } from './services/brewery.service';
         BreweryListComponent,
         HeaderComponent,
         FooterComponent,
+        BreweryDetailComponent,
     ],
     imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
     providers: [

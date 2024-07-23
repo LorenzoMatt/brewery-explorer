@@ -2,9 +2,9 @@
   <h2>{{ brewery.name }}</h2>
   <p>Type: {{ brewery.breweryType }}</p>
   <p>City: {{ brewery.city }}</p>
-  <p>Website: <a [href]="brewery.websiteUrl" target="_blank">{{ brewery.websiteUrl }}</a></p>
+  <p>Website: <a [href]=" brewery.websiteUrl" target="_blank">{{ brewery.websiteUrl }}</a></p>
   <div class="buttons">
-    <button class="details-btn">Details</button>
+    <button class="details-btn" (click)="selectBrewery(brewery)">Details</button>
     <button class="favorites-btn">Add to Favorites</button>
   </div>
 </div>

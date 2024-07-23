@@ -1,0 +1,11 @@
+<main class="container" *ngIf="brewery">
+  <div class="brewery-detail">
+    <h2>{{ brewery.name }}</h2>
+    <p>Type: {{ brewery.breweryType }}</p>
+    <p>Address: {{ brewery.address1 }}, {{ brewery.city }}, {{ brewery.state }}, {{ brewery.postalCode }}</p>
+    <p>Country: {{ brewery.country }}</p>
+    <p>Phone: {{ brewery.phone }}</p>
+    <p>Website: <a [href]="brewery.websiteUrl" target="_blank">{{ brewery.websiteUrl }}</a></p>
+    <button (click)="goBack()">Back</button>
+  </div>
+</main>

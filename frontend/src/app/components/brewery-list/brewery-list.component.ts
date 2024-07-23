@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { Brewery } from '../../models/brewery.model';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Brewery } from 'src/app/models/brewery.model';
 
 @Component({
     selector: 'app-brewery-list',
@@ -8,4 +8,9 @@ import { Brewery } from '../../models/brewery.model';
 })
 export class BreweryListComponent {
     @Input() breweries: Brewery[] = [];
+    @Output() brewerySelected = new EventEmitter<string>();
+
+    selectBrewery(brewery: Brewery) {
+        this.brewerySelected.emit(brewery.id);
+    }
 }

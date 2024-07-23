@@ -75,7 +75,7 @@ export class AuthService {
     refreshToken(): Observable<any> {
         return this.http
             .post<any>(
-                `${this.apiUrl}/refresh`,
+                `${this.apiUrl}/refresh-token`,
                 {},
                 {
                     headers: new HttpHeaders({

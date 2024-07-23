@@ -8,7 +8,7 @@ import {
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
-import { catchError, switchMap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 
 @Injectable({
@@ -33,30 +33,7 @@ export class AuthInterceptor implements HttpInterceptor {
         return next.handle(request).pipe(
             catchError((error: HttpErrorResponse) => {
                 if (error.status === 401) {
-                    if (currentUser && currentUser.jwt) {
-                        return this.authService.refreshToken().pipe(
-                            switchMap((response) => {
-                                if (response && response.jwt) {
-                                    currentUser = response;
-                                    return next.handle(
-                                        this.addToken(request, response.jwt)
-                                    );
-                                }
-                                this.authService.logout();
-                                this.router.navigate(['/login']);
-                                return this.handleError(error);
-                            }),
-                            catchError((err: HttpErrorResponse) => {
-                                this.authService.logout();
-                                this.router.navigate(['/login']);
-                                return this.handleError(err);
-                            })
-                        );
-                    } else {
-                        this.router.navigate(['/login']);
-                    }
-                } else {
-                    return this.handleError(error);
+                    this.router.navigate(['/login']);
                 }
                 return this.handleError(error);
             })
