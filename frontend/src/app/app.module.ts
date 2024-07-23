@@ -18,6 +18,7 @@ import { SearchBreweriesComponent } from './pages/search-breweries/search-brewer
 import { AuthInterceptor } from './services/auth.interceptor';
 import { AuthService } from './services/auth.service';
 import { BreweryService } from './services/brewery.service';
+import { AuthComponent } from './pages/auth/auth.component';
 
 @NgModule({
     declarations: [
@@ -32,6 +33,7 @@ import { BreweryService } from './services/brewery.service';
         BreweryDetailComponent,
         FavoritesComponent,
         SearchBreweriesComponent,
+        AuthComponent,
     ],
     imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
     providers: [

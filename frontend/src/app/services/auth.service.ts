@@ -69,7 +69,7 @@ export class AuthService {
         if (this.tokenRefreshTimeout) {
             clearTimeout(this.tokenRefreshTimeout);
         }
-        this.router.navigate(['/login']);
+        this.router.navigate(['/auth']);
     }
 
     refreshToken(): Observable<any> {
