@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -47,5 +48,15 @@ public class FavoriteController {
     @GetMapping
     public List<BreweryDto> getUserFavorites(@AuthenticationPrincipal UserDetails userDetails) {
         return favoriteService.getUserFavorites(userDetails.getUsername());
+    }
+
+    @Operation(summary = "Get list of favorite brewery IDs for a user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Favorite IDs retrieved successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content) })
+    @GetMapping("/ids")
+    public ResponseEntity<List<String>> getUserFavoriteIds(@AuthenticationPrincipal UserDetails userDetails) {
+        List<String> favoriteIds = favoriteService.getUserFavoriteIds(userDetails.getUsername());
+        return ResponseEntity.ok(favoriteIds);
     }
 }

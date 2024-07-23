@@ -77,6 +77,17 @@ public class FavoriteService {
         return favoriteBreweries;
     }
 
+    public List<String> getUserFavoriteIds(String username) {
+        logger.info("Fetching favorite brewery IDs for user: {}", username);
+        List<String> favoriteIds = favoriteRepository.findFavoriteIdsByUsername(username);
+        if (favoriteIds.isEmpty()) {
+            logger.warn("No favorite breweries found for user: {}", username);
+        } else {
+            logger.info("Found {} favorite breweries for user: {}", favoriteIds.size(), username);
+        }
+        return favoriteIds;
+    }
+
     private BreweryDto convertToDto(BreweryApiResponse apiResponse) {
         BreweryDto dto = new BreweryDto();
         dto.setId(apiResponse.getId());
