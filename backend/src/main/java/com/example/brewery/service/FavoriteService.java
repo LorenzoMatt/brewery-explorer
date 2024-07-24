@@ -87,6 +87,13 @@ public class FavoriteService {
         return favoriteIds;
     }
 
+    public boolean isBreweryInFavorites(String username, String breweryId) {
+        logger.info("Checking if brewery with ID {} is in favorites for user {}", breweryId, username);
+        boolean result = favoriteRepository.isBreweryInFavorites(username, breweryId);
+        logger.info("Brewery with ID {} is {} in favorites for user {}", breweryId, result ? "" : "not", username);
+        return result;
+    }
+
     private BreweryDto convertToDto(BreweryApiResponse apiResponse) {
         BreweryDto dto = new BreweryDto();
         dto.setId(apiResponse.getId());

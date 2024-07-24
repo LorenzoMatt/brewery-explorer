@@ -24,5 +24,6 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
     @Query("SELECT f.breweryId FROM Favorite f WHERE f.user.username = :username")
     List<String> findFavoriteIdsByUsername(@Param("username") String username);
 
-
+    @Query("SELECT CASE WHEN COUNT(f) > 0 THEN true ELSE false END FROM Favorite f WHERE f.user.username = :username AND f.breweryId = :breweryId")
+    boolean isBreweryInFavorites(@Param("username") String username, @Param("breweryId") String breweryId);
 }

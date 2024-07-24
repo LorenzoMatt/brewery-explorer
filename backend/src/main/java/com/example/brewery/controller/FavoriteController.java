@@ -68,4 +68,17 @@ public class FavoriteController {
         List<String> favoriteIds = favoriteService.getUserFavoriteIds(userDetails.getUsername());
         return ResponseEntity.ok(favoriteIds);
     }
+
+    @Operation(summary = "Check if a brewery is in user's favorites")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Brewery favorite status retrieved successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid request data", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @GetMapping("/is-favorite")
+    public ResponseEntity<Boolean> isFavorite(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String breweryId) {
+        boolean isInFavorite = favoriteService.isBreweryInFavorites(userDetails.getUsername(), breweryId);
+        return ResponseEntity.ok(isInFavorite);
+    }
 }
