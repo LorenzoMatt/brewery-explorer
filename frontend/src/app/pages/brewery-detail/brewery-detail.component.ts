@@ -12,6 +12,7 @@ import { NotificationService } from '../../services/notification.service';
 })
 export class BreweryDetailComponent implements OnInit {
     brewery: Brewery | null = null;
+    isFavorite = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -26,12 +27,49 @@ export class BreweryDetailComponent implements OnInit {
             this.breweryService.getBreweryById(id).subscribe(
                 (data) => {
                     this.brewery = data;
+                    this.checkIfFavorite(id);
                 },
                 (error) => {
                     this.notificationService.showError(
                         'Error fetching brewery details'
                     );
                     console.error(error);
+                }
+            );
+        }
+    }
+
+    checkIfFavorite(breweryId: string) {
+        this.breweryService.isFavorite(breweryId).subscribe((isFavorite) => {
+            this.isFavorite = isFavorite;
+        });
+    }
+
+    addToFavorites() {
+        if (this.brewery) {
+            this.breweryService.addFavorite(this.brewery.id).subscribe(
+                () => {
+                    this.isFavorite = true;
+                },
+                (error) => {
+                    this.notificationService.showError(
+                        'Failed to add brewery to favorites'
+                    );
+                }
+            );
+        }
+    }
+
+    removeFromFavorites() {
+        if (this.brewery) {
+            this.breweryService.removeFavorite(this.brewery.id).subscribe(
+                () => {
+                    this.isFavorite = false;
+                },
+                (error) => {
+                    this.notificationService.showError(
+                        'Failed to remove brewery from favorites'
+                    );
                 }
             );
         }

@@ -6,6 +6,13 @@
     <p>Country: {{ brewery.country }}</p>
     <p>Phone: {{ brewery.phone }}</p>
     <p>Website: <a [href]="brewery.websiteUrl" target="_blank">{{ brewery.websiteUrl }}</a></p>
-    <button (click)="goBack()">Back</button>
+    <div class="buttons">
+      <button (click)="goBack()" class="back-btn">Back</button>
+      <button *ngIf="isFavorite; else addFavorite" (click)="removeFromFavorites()" class="remove-favorite">Remove from
+        Favorites</button>
+      <ng-template #addFavorite>
+        <button (click)="addToFavorites()" class="add-favorite">Add to Favorites</button>
+      </ng-template>
+    </div>
   </div>
 </main>

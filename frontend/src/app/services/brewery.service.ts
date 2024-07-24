@@ -70,4 +70,10 @@ export class BreweryService {
             params,
         });
     }
+
+    isFavorite(breweryId: string): Observable<boolean> {
+        return this.http.get<boolean>(
+            `${this.apiUrl}/favorites/is-favorite?breweryId=${breweryId}`
+        );
+    }
 }
