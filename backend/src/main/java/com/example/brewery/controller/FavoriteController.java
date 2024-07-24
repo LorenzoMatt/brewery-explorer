@@ -30,7 +30,8 @@ public class FavoriteController {
     @Operation(summary = "Add a brewery to favorites")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Brewery added to favorites successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid request data", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))) })
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))) })
     @PostMapping("/add")
     public void addFavorite(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String breweryId) {
         favoriteService.addFavorite(userDetails.getUsername(), breweryId);
@@ -39,7 +40,8 @@ public class FavoriteController {
     @Operation(summary = "Remove a brewery from favorites")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Brewery removed from favorites successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid request data", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))) })
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))) })
     @DeleteMapping("/remove")
     public void removeFavorite(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String breweryId) {
         favoriteService.removeFavorite(userDetails.getUsername(), breweryId);
@@ -48,7 +50,8 @@ public class FavoriteController {
     @Operation(summary = "Get favorite breweries of a user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Favorite breweries retrieved successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BreweryDto.class))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))) })
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))})
     @GetMapping
     public ResponseEntity<List<BreweryDto>> getUserFavorites(@AuthenticationPrincipal UserDetails userDetails) {
         List<BreweryDto> userFavorites = favoriteService.getUserFavorites(userDetails.getUsername());
@@ -58,7 +61,8 @@ public class FavoriteController {
     @Operation(summary = "Get list of favorite brewery IDs for a user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Favorite IDs retrieved successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))) })
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))})
     @GetMapping("/ids")
     public ResponseEntity<List<String>> getUserFavoriteIds(@AuthenticationPrincipal UserDetails userDetails) {
         List<String> favoriteIds = favoriteService.getUserFavoriteIds(userDetails.getUsername());
