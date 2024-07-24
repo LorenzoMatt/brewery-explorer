@@ -22,12 +22,22 @@ export class AuthGuard implements CanActivate {
         state: RouterStateSnapshot
     ): Observable<boolean> | Promise<boolean> | boolean {
         const currentUser = this.authService.currentUserValue;
-        if (currentUser && currentUser.jwt) {
+        if (
+            currentUser &&
+            currentUser.jwt &&
+            this.isTokenValid(currentUser.expiration)
+        ) {
             return true;
         }
 
         // Not logged in, redirect to login page
         this.router.navigate(['/auth']);
         return false;
+    }
+
+    private isTokenValid(expiration: string): boolean {
+        const currentDate = new Date();
+        const expirationDate = new Date(expiration);
+        return expirationDate > currentDate;
     }
 }
