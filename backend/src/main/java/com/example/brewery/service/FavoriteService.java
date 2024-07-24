@@ -24,16 +24,15 @@ import java.util.stream.Collectors;
 public class FavoriteService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private final String apiUrl;
-    private final FavoriteRepository favoriteRepository;
-    private final AppUserRepository appUserRepository;
+
+    @Value("${brewery.api.url}")
+    private String apiUrl;
 
     @Autowired
-    public FavoriteService(@Value("${brewery.api.url}") String apiUrl, FavoriteRepository favoriteRepository, AppUserRepository appUserRepository) {
-        this.apiUrl = apiUrl;
-        this.favoriteRepository = favoriteRepository;
-        this.appUserRepository = appUserRepository;
-    }
+    private FavoriteRepository favoriteRepository;
+
+    @Autowired
+    private AppUserRepository appUserRepository;
 
     @Transactional
     public void addFavorite(String username, String breweryId) {

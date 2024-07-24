@@ -17,20 +17,17 @@ public class JwtTokenUtil {
 
     private final SecretKey secretKey;
 
-    public JwtTokenUtil(@Value("${jwt.secret}") String secret) {
+    private final long expiration;
+
+    public JwtTokenUtil(@Value("${jwt.secret}") String secret, @Value("${jwt.expiration}") long expiration) {
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes());
+        this.expiration = expiration;
     }
 
-    @Value("${jwt.expiration}")
-    private long expiration;
 
     public String generateToken(UserDetails userDetails) {
-        return Jwts.builder()
-                .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(secretKey, SignatureAlgorithm.HS512)
-                .compact();
+        return Jwts.builder().setSubject(userDetails.getUsername()).setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + expiration)).signWith(secretKey, SignatureAlgorithm.HS512).compact();
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
@@ -62,12 +59,7 @@ public class JwtTokenUtil {
 
     public String refreshToken(String token) {
         final Claims claims = getAllClaimsFromToken(token);
-        return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(claims.getSubject())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(SignatureAlgorithm.HS512, secretKey)
-                .compact();
+        return Jwts.builder().setClaims(claims).setSubject(claims.getSubject()).setIssuedAt(new Date()).setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(SignatureAlgorithm.HS512, secretKey).compact();
     }
 }

@@ -20,8 +20,12 @@ import java.util.List;
 @RequestMapping("/api/favorites")
 public class FavoriteController {
 
+    private final FavoriteService favoriteService;
+
     @Autowired
-    private FavoriteService favoriteService;
+    public FavoriteController(FavoriteService favoriteService) {
+        this.favoriteService = favoriteService;
+    }
 
     @Operation(summary = "Add a brewery to favorites")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Brewery added to favorites successfully"),
@@ -46,8 +50,9 @@ public class FavoriteController {
             @ApiResponse(responseCode = "200", description = "Favorite breweries retrieved successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BreweryDto.class))),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))) })
     @GetMapping
-    public List<BreweryDto> getUserFavorites(@AuthenticationPrincipal UserDetails userDetails) {
-        return favoriteService.getUserFavorites(userDetails.getUsername());
+    public ResponseEntity<List<BreweryDto>> getUserFavorites(@AuthenticationPrincipal UserDetails userDetails) {
+        List<BreweryDto> userFavorites = favoriteService.getUserFavorites(userDetails.getUsername());
+        return ResponseEntity.ok(userFavorites);
     }
 
     @Operation(summary = "Get list of favorite brewery IDs for a user")

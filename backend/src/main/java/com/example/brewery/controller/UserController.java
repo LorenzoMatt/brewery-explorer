@@ -27,17 +27,22 @@ import java.time.LocalDateTime;
 @RequestMapping("/api/users")
 public class UserController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+
+    private final CustomUserDetailsService customUserDetailsService;
+
+    private final JwtTokenUtil jwtTokenUtil;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    private CustomUserDetailsService customUserDetailsService;
-
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public UserController(AuthenticationManager authenticationManager, CustomUserDetailsService customUserDetailsService, JwtTokenUtil jwtTokenUtil,
+            PasswordEncoder passwordEncoder) {
+        this.authenticationManager = authenticationManager;
+        this.customUserDetailsService = customUserDetailsService;
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Operation(summary = "Register a new user")
     @ApiResponses(value = {

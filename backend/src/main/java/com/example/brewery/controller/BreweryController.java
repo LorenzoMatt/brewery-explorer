@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +22,12 @@ import java.util.List;
 @Validated
 public class BreweryController {
 
+    private final BreweryService breweryService;
+
     @Autowired
-    private BreweryService breweryService;
+    public BreweryController(BreweryService breweryService) {
+        this.breweryService = breweryService;
+    }
 
     @Operation(summary = "Get a paginated list of breweries")
     @ApiResponses(value = {
@@ -30,8 +35,9 @@ public class BreweryController {
             @ApiResponse(responseCode = "400", description = "Invalid pagination parameters", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))) })
     @GetMapping
-    public List<BreweryDto> getBreweries(@RequestParam @Min(0) int page, @RequestParam @Min(1) int size) {
-        return breweryService.getBreweries(page, size);
+    public ResponseEntity<List<BreweryDto>> getBreweries(@RequestParam @Min(0) int page, @RequestParam @Min(1) int size) {
+        List<BreweryDto> breweries = breweryService.getBreweries(page, size);
+        return ResponseEntity.ok(breweries);
     }
 
     @Operation(summary = "Get details of a specific brewery by ID")
@@ -41,8 +47,9 @@ public class BreweryController {
             @ApiResponse(responseCode = "404", description = "Brewery not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))) })
     @GetMapping("/{id}")
-    public BreweryDto getBreweryById(@PathVariable String id) {
-        return breweryService.getBreweryById(id);
+    public ResponseEntity<BreweryDto> getBreweryById(@PathVariable String id) {
+        BreweryDto brewery = breweryService.getBreweryById(id);
+        return ResponseEntity.ok(brewery);
     }
 
     @Operation(summary = "Search and filter breweries")
@@ -51,8 +58,9 @@ public class BreweryController {
             @ApiResponse(responseCode = "400", description = "Invalid search parameters", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))) })
     @GetMapping("/search")
-    public List<BreweryDto> searchBreweries(@RequestParam(required = false) String name, @RequestParam(required = false) String city, @RequestParam(required = false) String state,
+    public ResponseEntity<List<BreweryDto>> searchBreweries(@RequestParam(required = false) String name, @RequestParam(required = false) String city, @RequestParam(required = false) String state,
             @RequestParam(required = false) @BreweryTypeValidator String breweryType) {
-        return breweryService.searchBreweries(name, city, state, breweryType);
+        List<BreweryDto> breweries = breweryService.searchBreweries(name, city, state, breweryType);
+        return ResponseEntity.ok(breweries);
     }
 }
