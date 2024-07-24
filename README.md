@@ -86,3 +86,4 @@ Below are the key environment variables used in the project, which can be found 
 
 ### User Interface Improvements
 - GUI Enhancements: Redesign the graphical user interface to be more appealing and enhancing overall user engagement.
+- Unified CSS for Common Components: Refactor CSS for common components (e.g., header, footer, add/remove favorites buttons) to ensure consistency in styling across the application.
