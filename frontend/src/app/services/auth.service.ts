@@ -73,16 +73,14 @@ export class AuthService {
     }
 
     refreshToken(): Observable<any> {
+        const currentUser = this.currentUserValue;
+        const token = currentUser ? currentUser.jwt : null;
         return this.http
-            .post<any>(
-                `${this.apiUrl}/refresh-token`,
-                {},
-                {
-                    headers: new HttpHeaders({
-                        'Content-Type': 'application/json',
-                    }),
-                }
-            )
+            .post<any>(`${this.apiUrl}/refresh-token`, token, {
+                headers: new HttpHeaders({
+                    'Content-Type': 'application/json',
+                }),
+            })
             .pipe(
                 map((response) => {
                     if (response && response.jwt) {
@@ -104,7 +102,6 @@ export class AuthService {
 
         if (jwtToken && expiration) {
             const timeout = expiration - Date.now() - 5 * 60 * 1000; // 5 minutes before expiry
-
             if (this.tokenRefreshTimeout) {
                 clearTimeout(this.tokenRefreshTimeout);
             }
