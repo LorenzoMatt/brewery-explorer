@@ -5,11 +5,11 @@
   <p>State: {{ brewery.state }}</p>
   <p>Website: <a [href]="brewery.websiteUrl" target="_blank">{{ brewery.websiteUrl }}</a></p>
   <div class="buttons">
-    <button class="details-btn" (click)="selectBrewery(brewery)">Details</button>
+    <button class="details-btn" (click)="onBrewerySelected(brewery.id)">Details</button>
     <button [ngClass]="{
         'add-favorite-btn': !isFavorite(brewery.id),
         'remove-favorite-btn': isFavorite(brewery.id)
-      }" (click)="onAddFavorite(brewery.id)">
+      }" (click)="onFavoriteSelected(brewery.id)">
       {{ isFavorite(brewery.id) ? 'Remove from Favorites' : 'Add to Favorites' }}
     </button>
   </div>

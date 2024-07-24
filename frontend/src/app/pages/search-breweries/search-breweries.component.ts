@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { BreweryType } from 'src/app/models/brewery-type.enum';
 import { NotificationService } from 'src/app/services/notification.service';
 import { Brewery } from '../../models/brewery.model';
@@ -18,11 +18,9 @@ export class SearchBreweriesComponent implements OnInit {
     breweryType: BreweryType | null = null;
     breweryTypes = BreweryType;
     breweries: Brewery[] = [];
-    favoriteIdsSet: Set<string> = new Set();
 
     constructor(
         private breweryService: BreweryService,
-        private router: Router,
         private route: ActivatedRoute,
         private notificationService: NotificationService
     ) {}
@@ -31,21 +29,6 @@ export class SearchBreweriesComponent implements OnInit {
         this.route.data.subscribe((data) => {
             this.searchType = data['searchType'];
         });
-        this.loadFavoriteIds();
-    }
-
-    loadFavoriteIds() {
-        this.breweryService.getUserFavoriteIds().subscribe(
-            (data) => {
-                this.favoriteIdsSet = new Set(data);
-            },
-            (error) => {
-                this.notificationService.showError(
-                    'Error loading favorite IDs'
-                );
-                console.error(error);
-            }
-        );
     }
 
     search() {
@@ -53,9 +36,6 @@ export class SearchBreweriesComponent implements OnInit {
             this.breweryService.searchBreweries(this.name.trim()).subscribe(
                 (data) => {
                     this.breweries = data;
-                    this.notificationService.showSuccess(
-                        'Searching breweries ended successfully'
-                    );
                 },
                 (error) => {
                     this.notificationService.showError(
@@ -83,39 +63,5 @@ export class SearchBreweriesComponent implements OnInit {
                     }
                 );
         }
-    }
-
-    onAddFavorite(breweryId: string) {
-        this.breweryService.addFavorite(breweryId).subscribe(
-            () => {
-                this.favoriteIdsSet.add(breweryId);
-            },
-            (error) => {
-                this.notificationService.showError('Error adding to favorites');
-                console.error(error);
-            }
-        );
-    }
-
-    onRemoveFavorite(breweryId: string) {
-        this.breweryService.removeFavorite(breweryId).subscribe(
-            () => {
-                this.favoriteIdsSet.delete(breweryId);
-            },
-            (error) => {
-                this.notificationService.showError(
-                    'Error removing from favorites'
-                );
-                console.error(error);
-            }
-        );
-    }
-
-    onBrewerySelected(id: string) {
-        this.router.navigate(['/brewery', id]);
-    }
-
-    isFavorite(breweryId: string): boolean {
-        return this.favoriteIdsSet.has(breweryId);
     }
 }
