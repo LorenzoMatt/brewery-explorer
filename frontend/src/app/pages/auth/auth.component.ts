@@ -12,7 +12,6 @@ import { NotificationService } from 'src/app/services/notification.service';
 export class AuthComponent {
     user: User = { username: '', password: '' };
     isLogin = true;
-    successMessage = '';
     errorMessage = '';
 
     constructor(
@@ -37,7 +36,9 @@ export class AuthComponent {
         } else {
             this.authService.register(this.user).subscribe(
                 () => {
-                    this.successMessage = 'Registered successfully!';
+                  this.notificationService.showSuccess(
+                    'Registered successfully!'
+                  );
                     this.toggleAuth();
                 },
                 (error) => {
@@ -49,7 +50,6 @@ export class AuthComponent {
 
     toggleAuth() {
         this.isLogin = !this.isLogin;
-        this.successMessage = '';
         this.errorMessage = '';
     }
 }

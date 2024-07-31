@@ -12,7 +12,6 @@
     <button type="submit" class="btn" [disabled]="!user.username || !user.password">
       {{ isLogin ? 'Login' : 'Register' }}
     </button>
-    <div class="success" *ngIf="successMessage">{{ successMessage }}</div>
     <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
   </form>
   <div class="toggle" (click)="toggleAuth()">
