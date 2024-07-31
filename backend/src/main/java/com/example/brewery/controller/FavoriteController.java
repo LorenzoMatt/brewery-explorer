@@ -4,6 +4,7 @@ import com.example.brewery.dto.BreweryDto;
 import com.example.brewery.exception.ErrorResponse;
 import com.example.brewery.service.FavoriteService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -49,7 +50,7 @@ public class FavoriteController {
 
     @Operation(summary = "Get favorite breweries of a user")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Favorite breweries retrieved successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BreweryDto.class))),
+            @ApiResponse(responseCode = "200", description = "Favorite breweries retrieved successfully", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = BreweryDto.class)))),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))})
     @GetMapping
@@ -60,7 +61,7 @@ public class FavoriteController {
 
     @Operation(summary = "Get list of favorite brewery IDs for a user")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Favorite IDs retrieved successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "200", description = "Favorite IDs retrieved successfully", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = String.class)))),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))})
     @GetMapping("/ids")
