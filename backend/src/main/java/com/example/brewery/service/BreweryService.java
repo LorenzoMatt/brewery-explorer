@@ -1,9 +1,11 @@
 package com.example.brewery.service;
 
 import com.example.brewery.dto.BreweryDto;
+import com.example.brewery.dto.BreweryType;
 import com.example.brewery.model.BreweryApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -23,14 +25,17 @@ public class BreweryService {
 
     private final String apiUrl;
 
-    public BreweryService(@Value("${brewery.api.url}") String apiUrl) {
+    private final RestTemplate restTemplate;
+
+    @Autowired
+    public BreweryService(@Value("${brewery.api.url}") String apiUrl, RestTemplate restTemplate) {
         this.apiUrl = apiUrl;
+        this.restTemplate = restTemplate;
     }
 
     @Cacheable("breweries")
     public List<BreweryDto> getBreweries(int page, int size) {
         logger.info("Fetching breweries - page: {}, size: {}", page, size);
-        RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "?page=" + page + "&per_page=" + size;
         BreweryApiResponse[] breweries = restTemplate.getForObject(url, BreweryApiResponse[].class);
 
@@ -46,7 +51,6 @@ public class BreweryService {
     @Cacheable("brewery")
     public BreweryDto getBreweryById(String id) {
         logger.info("Fetching brewery with ID: {}", id);
-        RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/" + id;
         BreweryApiResponse brewery = restTemplate.getForObject(url, BreweryApiResponse.class);
 
@@ -61,7 +65,6 @@ public class BreweryService {
 
     public List<BreweryDto> searchBreweries(String name, String city, String state, String breweryType) {
         logger.info("Searching breweries - name: {}, city: {}, state: {}, type: {}", name, city, state, breweryType);
-        RestTemplate restTemplate = new RestTemplate();
 
         StringBuilder url = new StringBuilder(apiUrl);
         url.append("?");
@@ -108,7 +111,7 @@ public class BreweryService {
         BreweryDto dto = new BreweryDto();
         dto.setId(apiResponse.getId());
         dto.setName(apiResponse.getName());
-        dto.setBreweryType(apiResponse.getBreweryType());
+        dto.setBreweryType(BreweryType.fromString(apiResponse.getBreweryType()));
         dto.setAddress1(apiResponse.getAddress1());
         dto.setAddress2(apiResponse.getAddress2());
         dto.setAddress3(apiResponse.getAddress3());

@@ -13,7 +13,7 @@ public class BreweryApiResponse {
     private String name;
 
     @JsonProperty("brewery_type")
-    private BreweryType breweryType;
+    private String breweryType;
 
     @JsonProperty("address_1")
     private String address1;

@@ -1,6 +1,7 @@
 package com.example.brewery.service;
 
 import com.example.brewery.dto.BreweryDto;
+import com.example.brewery.dto.BreweryType;
 import com.example.brewery.entity.AppUser;
 import com.example.brewery.entity.Favorite;
 import com.example.brewery.model.BreweryApiResponse;
@@ -34,6 +35,9 @@ public class FavoriteService {
     @Autowired
     private AppUserRepository appUserRepository;
 
+    @Autowired
+    private RestTemplate restTemplate;
+
     @Transactional
     public void addFavorite(String username, String breweryId) {
         logger.info("Adding favorite brewery with ID: {} for user: {}", breweryId, username);
@@ -59,7 +63,6 @@ public class FavoriteService {
             return Collections.emptyList();
         }
 
-        RestTemplate restTemplate = new RestTemplate();
         String idsParam = String.join(",", breweryIds);
         String url = apiUrl + "?by_ids=" + idsParam;
 
@@ -98,7 +101,7 @@ public class FavoriteService {
         BreweryDto dto = new BreweryDto();
         dto.setId(apiResponse.getId());
         dto.setName(apiResponse.getName());
-        dto.setBreweryType(apiResponse.getBreweryType());
+        dto.setBreweryType(BreweryType.fromString(apiResponse.getBreweryType()));
         dto.setAddress1(apiResponse.getAddress1());
         dto.setAddress2(apiResponse.getAddress2());
         dto.setAddress3(apiResponse.getAddress3());
