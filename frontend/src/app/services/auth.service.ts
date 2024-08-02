@@ -3,13 +3,14 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 import { User } from '../models/user.model';
 
 @Injectable({
     providedIn: 'root',
 })
 export class AuthService {
-    private apiUrl = 'http://localhost:8080/api/users';
+    private apiUrl = `${environment.apiUrl}/users`;
     private currentUserSubject: BehaviorSubject<any>;
     public currentUser: Observable<any>;
     private tokenRefreshTimeout: any;

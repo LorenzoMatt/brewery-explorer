@@ -55,10 +55,6 @@
   background-color: #1e90ff;
 }
 
-.brewery-card .buttons .favorites-btn {
-  background-color: #32cd32;
-}
-
 .add-favorite-btn {
   background-color: #28a745;
   color: white;
@@ -73,12 +69,6 @@
   border: none;
   padding: 10px;
   cursor: pointer;
-}
-
-.add-favorite-btn:disabled,
-.remove-favorite-btn:disabled {
-  background-color: #6c757d;
-  cursor: not-allowed;
 }
 
 .buttons button:hover {
