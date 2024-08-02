@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { NotificationService } from 'src/app/services/notification.service';
 import { Brewery } from '../../models/brewery.model';
 import { BreweryService } from '../../services/brewery.service';
@@ -8,10 +9,11 @@ import { BreweryService } from '../../services/brewery.service';
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
     breweries: Brewery[] = [];
     page = 1;
     pageSize = 10;
+    private subscriptions: Subscription = new Subscription();
 
     constructor(
         private breweryService: BreweryService,
@@ -23,14 +25,16 @@ export class HomeComponent implements OnInit {
     }
 
     loadBreweries() {
-        this.breweryService.getBreweries(this.page, this.pageSize).subscribe(
-            (data) => {
-                this.breweries = data;
-            },
-            (error) => {
-                this.notificationService.showError('Error loading breweries');
-                console.error(error);
-            }
+        this.subscriptions.add(
+            this.breweryService.getBreweries(this.page, this.pageSize).subscribe(
+                (data) => {
+                    this.breweries = data;
+                },
+                (error) => {
+                    this.notificationService.showError('Error loading breweries');
+                    console.error(error);
+                }
+            )
         );
     }
 
@@ -43,5 +47,9 @@ export class HomeComponent implements OnInit {
         this.pageSize = pageSize;
         this.page = 1; // Reset to first page when page size changes
         this.loadBreweries();
+    }
+
+    ngOnDestroy() {
+        this.subscriptions.unsubscribe();
     }
 }

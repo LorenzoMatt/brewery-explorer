@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { Brewery } from 'src/app/models/brewery.model';
 import { BreweryService } from 'src/app/services/brewery.service';
 import { NotificationService } from 'src/app/services/notification.service';
@@ -9,10 +10,10 @@ import { NotificationService } from 'src/app/services/notification.service';
     templateUrl: './brewery-list.component.html',
     styleUrls: ['./brewery-list.component.css'],
 })
-export class BreweryListComponent {
+export class BreweryListComponent implements OnInit, OnDestroy {
     @Input() breweries: Brewery[] = [];
-
     favoriteIdsSet = new Set<string>();
+    private subscriptions: Subscription = new Subscription();
 
     constructor(
         private breweryService: BreweryService,
@@ -25,15 +26,15 @@ export class BreweryListComponent {
     }
 
     loadFavoriteIds() {
-        this.breweryService.getUserFavoriteIds().subscribe(
-            (ids) => {
-                this.favoriteIdsSet = new Set(ids);
-            },
-            (error) => {
-                this.notificationService.showError(
-                    'Failed to load favorite IDs'
-                );
-            }
+        this.subscriptions.add(
+            this.breweryService.getUserFavoriteIds().subscribe(
+                (ids) => {
+                    this.favoriteIdsSet = new Set(ids);
+                },
+                (error) => {
+                    this.notificationService.showError('Failed to load favorite IDs');
+                }
+            )
         );
     }
 
@@ -42,28 +43,28 @@ export class BreweryListComponent {
     }
 
     onAddFavorite(id: string) {
-        this.breweryService.addFavorite(id).subscribe(
-            () => {
-                this.favoriteIdsSet.add(id);
-            },
-            (error) => {
-                this.notificationService.showError(
-                    'Failed to add brewery to favorites'
-                );
-            }
+        this.subscriptions.add(
+            this.breweryService.addFavorite(id).subscribe(
+                () => {
+                    this.favoriteIdsSet.add(id);
+                },
+                (error) => {
+                    this.notificationService.showError('Failed to add brewery to favorites');
+                }
+            )
         );
     }
 
     onRemoveFavorite(id: string) {
-        this.breweryService.removeFavorite(id).subscribe(
-            () => {
-                this.favoriteIdsSet.delete(id);
-            },
-            (error) => {
-                this.notificationService.showError(
-                    'Failed to remove brewery from favorites'
-                );
-            }
+        this.subscriptions.add(
+            this.breweryService.removeFavorite(id).subscribe(
+                () => {
+                    this.favoriteIdsSet.delete(id);
+                },
+                (error) => {
+                    this.notificationService.showError('Failed to remove brewery from favorites');
+                }
+            )
         );
     }
 
@@ -77,5 +78,9 @@ export class BreweryListComponent {
 
     isFavorite(id: string): boolean {
         return this.favoriteIdsSet.has(id);
+    }
+
+    ngOnDestroy() {
+        this.subscriptions.unsubscribe();
     }
 }

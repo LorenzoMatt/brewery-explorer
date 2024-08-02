@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { BreweryType } from 'src/app/models/brewery-type.enum';
 import { NotificationService } from 'src/app/services/notification.service';
 import { Brewery } from '../../models/brewery.model';
@@ -10,7 +11,7 @@ import { BreweryService } from '../../services/brewery.service';
     templateUrl: './search-breweries.component.html',
     styleUrls: ['./search-breweries.component.css'],
 })
-export class SearchBreweriesComponent implements OnInit {
+export class SearchBreweriesComponent implements OnInit, OnDestroy {
     searchType: 'name' | 'criteria' = 'name';
     name: string = '';
     city: string = '';
@@ -18,6 +19,7 @@ export class SearchBreweriesComponent implements OnInit {
     breweryType: BreweryType | null = null;
     breweryTypes = BreweryType;
     breweries: Brewery[] = [];
+    private subscriptions: Subscription = new Subscription();
 
     constructor(
         private breweryService: BreweryService,
@@ -26,42 +28,48 @@ export class SearchBreweriesComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.route.data.subscribe((data) => {
-            this.searchType = data['searchType'];
-        });
+        this.subscriptions.add(
+            this.route.data.subscribe((data) => {
+                this.searchType = data['searchType'];
+            })
+        );
     }
 
     search() {
         if (this.searchType === 'name') {
-            this.breweryService.searchBreweries(this.name.trim()).subscribe(
-                (data) => {
-                    this.breweries = data;
-                },
-                (error) => {
-                    this.notificationService.showError(
-                        'Error searching breweries'
-                    );
-                    console.error(error);
-                }
-            );
-        } else {
-            this.breweryService
-                .filterBreweries(
-                    this.city.trim(),
-                    this.state.trim(),
-                    this.breweryType
-                )
-                .subscribe(
+            this.subscriptions.add(
+                this.breweryService.searchBreweries(this.name.trim()).subscribe(
                     (data) => {
                         this.breweries = data;
                     },
                     (error) => {
-                        this.notificationService.showError(
-                            'Error filtering breweries'
-                        );
+                        this.notificationService.showError('Error searching breweries');
                         console.error(error);
                     }
-                );
+                )
+            );
+        } else {
+            this.subscriptions.add(
+                this.breweryService
+                    .filterBreweries(
+                        this.city.trim(),
+                        this.state.trim(),
+                        this.breweryType
+                    )
+                    .subscribe(
+                        (data) => {
+                            this.breweries = data;
+                        },
+                        (error) => {
+                            this.notificationService.showError('Error filtering breweries');
+                            console.error(error);
+                        }
+                    )
+            );
         }
+    }
+
+    ngOnDestroy() {
+        this.subscriptions.unsubscribe();
     }
 }

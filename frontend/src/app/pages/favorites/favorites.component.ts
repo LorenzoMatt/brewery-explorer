@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { NotificationService } from 'src/app/services/notification.service';
 import { Brewery } from '../../models/brewery.model';
 import { BreweryService } from '../../services/brewery.service';
@@ -8,8 +9,9 @@ import { BreweryService } from '../../services/brewery.service';
     templateUrl: './favorites.component.html',
     styleUrls: ['./favorites.component.css'],
 })
-export class FavoritesComponent implements OnInit {
+export class FavoritesComponent implements OnInit, OnDestroy {
     breweries: Brewery[] = [];
+    private subscriptions: Subscription = new Subscription();
 
     constructor(
         private breweryService: BreweryService,
@@ -21,14 +23,20 @@ export class FavoritesComponent implements OnInit {
     }
 
     loadFavorites() {
-        this.breweryService.getUserFavorites().subscribe(
-            (data) => {
-                this.breweries = data;
-            },
-            (error) => {
-                this.notificationService.showError('Error loading favorites');
-                console.error(error);
-            }
+        this.subscriptions.add(
+            this.breweryService.getUserFavorites().subscribe(
+                (data) => {
+                    this.breweries = data;
+                },
+                (error) => {
+                    this.notificationService.showError('Error loading favorites');
+                    console.error(error);
+                }
+            )
         );
+    }
+
+    ngOnDestroy() {
+        this.subscriptions.unsubscribe();
     }
 }
