@@ -27,7 +27,9 @@ export class AuthComponent implements OnDestroy {
             this.subscriptions.add(
                 this.authService.login(this.user).subscribe(
                     () => {
-                        this.notificationService.showSuccess('Logged in successfully!');
+                        this.notificationService.showSuccess(
+                            'Logged in successfully!'
+                        );
                         this.router.navigate(['/']);
                     },
                     (error) => {
@@ -39,7 +41,9 @@ export class AuthComponent implements OnDestroy {
             this.subscriptions.add(
                 this.authService.register(this.user).subscribe(
                     () => {
-                        this.notificationService.showSuccess('Registered successfully!');
+                        this.notificationService.showSuccess(
+                            'Registered successfully!'
+                        );
                         this.toggleAuth();
                     },
                     (error) => {

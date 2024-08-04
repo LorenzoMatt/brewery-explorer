@@ -33,7 +33,9 @@ export class BreweryDetailComponent implements OnInit, OnDestroy {
                         this.checkIfFavorite(id);
                     },
                     (error) => {
-                        this.notificationService.showError('Error fetching brewery details');
+                        this.notificationService.showError(
+                            'Error fetching brewery details'
+                        );
                         console.error(error);
                     }
                 )
@@ -43,9 +45,11 @@ export class BreweryDetailComponent implements OnInit, OnDestroy {
 
     checkIfFavorite(breweryId: string) {
         this.subscriptions.add(
-            this.breweryService.isFavorite(breweryId).subscribe((isFavorite) => {
-                this.isFavorite = isFavorite;
-            })
+            this.breweryService
+                .isFavorite(breweryId)
+                .subscribe((isFavorite) => {
+                    this.isFavorite = isFavorite;
+                })
         );
     }
 
@@ -57,7 +61,9 @@ export class BreweryDetailComponent implements OnInit, OnDestroy {
                         this.isFavorite = true;
                     },
                     (error) => {
-                        this.notificationService.showError('Failed to add brewery to favorites');
+                        this.notificationService.showError(
+                            'Failed to add brewery to favorites'
+                        );
                     }
                 )
             );
@@ -72,7 +78,9 @@ export class BreweryDetailComponent implements OnInit, OnDestroy {
                         this.isFavorite = false;
                     },
                     (error) => {
-                        this.notificationService.showError('Failed to remove brewery from favorites');
+                        this.notificationService.showError(
+                            'Failed to remove brewery from favorites'
+                        );
                     }
                 )
             );

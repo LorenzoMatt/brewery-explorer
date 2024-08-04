@@ -10,10 +10,8 @@ import { HeaderComponent } from './components/header/header.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
 import { AuthGuard } from './guards/auth.guard';
 import { AuthComponent } from './pages/auth/auth.component';
+import { BreweryDashboardComponent } from './pages/brewery-dashboard/brewery-dashboard.component';
 import { BreweryDetailComponent } from './pages/brewery-detail/brewery-detail.component';
-import { FavoritesComponent } from './pages/favorites/favorites.component';
-import { HomeComponent } from './pages/home/home.component';
-import { SearchBreweriesComponent } from './pages/search-breweries/search-breweries.component';
 import { AuthInterceptor } from './services/auth.interceptor';
 import { AuthService } from './services/auth.service';
 import { BreweryService } from './services/brewery.service';
@@ -21,15 +19,13 @@ import { BreweryService } from './services/brewery.service';
 @NgModule({
     declarations: [
         AppComponent,
-        HomeComponent,
         PaginationComponent,
         BreweryListComponent,
         HeaderComponent,
         FooterComponent,
         BreweryDetailComponent,
-        FavoritesComponent,
-        SearchBreweriesComponent,
         AuthComponent,
+        BreweryDashboardComponent,
     ],
     imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
     providers: [

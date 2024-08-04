@@ -1,7 +1,0 @@
-<main class='container'>
-  <app-pagination [page]="page" [pageSize]="pageSize" [hasMore]="breweries.length === pageSize"
-    (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)">
-  </app-pagination>
-
-  <app-brewery-list [breweries]="breweries"></app-brewery-list>
-</main>
