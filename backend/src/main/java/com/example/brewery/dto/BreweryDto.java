@@ -6,7 +6,7 @@ import lombok.Data;
 public class BreweryDto {
     private String id;
     private String name;
-    private BreweryType breweryType;
+    private String breweryType;
     private String address1;
     private String address2;
     private String address3;

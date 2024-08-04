@@ -13,9 +13,7 @@ public enum BreweryType {
     BAR("bar"),
     CONTRACT("contract"),
     PROPRIETOR("proprietor"),
-    CLOSED("closed"),
-    TAPROOM("taproom"),
-    LOCATION("location");
+    CLOSED("closed");
 
     private final String type;
 

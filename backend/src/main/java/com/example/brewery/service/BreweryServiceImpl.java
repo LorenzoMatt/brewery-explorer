@@ -114,7 +114,7 @@ public class BreweryServiceImpl implements BreweryService {
         BreweryDto dto = new BreweryDto();
         dto.setId(apiResponse.getId());
         dto.setName(apiResponse.getName());
-        dto.setBreweryType(BreweryType.fromString(apiResponse.getBreweryType()));
+        dto.setBreweryType(apiResponse.getBreweryType());
         dto.setAddress1(apiResponse.getAddress1());
         dto.setAddress2(apiResponse.getAddress2());
         dto.setAddress3(apiResponse.getAddress3());
