@@ -1,54 +1,11 @@
 package com.example.brewery.service;
 
 import com.example.brewery.dto.UserDto;
-import com.example.brewery.entity.AppUser;
-import com.example.brewery.repository.AppUserRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Optional;
+public interface CustomUserDetailsService extends UserDetailsService {
 
-@Service
-public class CustomUserDetailsService implements UserDetailsService {
+    boolean userExists(String username);
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    private final AppUserRepository userRepository;
-
-    @Autowired
-    public CustomUserDetailsService(AppUserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        logger.info("Loading user by username: {}", username);
-        Optional<AppUser> user = userRepository.findByUsername(username);
-        user.orElseThrow(() -> {
-            logger.error("User not found: {}", username);
-            return new UsernameNotFoundException("Not found: " + username);
-        });
-        logger.info("User found: {}", username);
-        return new org.springframework.security.core.userdetails.User(user.get().getUsername(), user.get().getPassword(), new ArrayList<>());
-    }
-
-    public boolean userExists(String username) {
-        boolean exists = userRepository.existsByUsername(username);
-        logger.info("Checking if user exists: {} - {}", username, exists);
-        return exists;
-    }
-
-    public void saveUser(UserDto userDto) {
-        AppUser user = new AppUser();
-        user.setUsername(userDto.getUsername());
-        user.setPassword(userDto.getPassword());
-        userRepository.save(user);
-        logger.info("User saved: {}", userDto.getUsername());
-    }
+    void saveUser(UserDto userDto);
 }
