@@ -1,7 +1,6 @@
 package com.example.brewery.service;
 
 import com.example.brewery.dto.BreweryDto;
-import com.example.brewery.dto.BreweryType;
 import com.example.brewery.model.BreweryApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

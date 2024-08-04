@@ -1,6 +1,5 @@
 package com.example.brewery.repository;
 
-import com.example.brewery.entity.AppUser;
 import com.example.brewery.entity.Favorite;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

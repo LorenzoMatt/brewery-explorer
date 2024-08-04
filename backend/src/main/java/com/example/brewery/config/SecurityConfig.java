@@ -1,6 +1,5 @@
 package com.example.brewery.config;
 
-import com.example.brewery.service.CustomUserDetailsService;
 import com.example.brewery.util.JwtAuthenticationEntryPoint;
 import com.example.brewery.util.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,18 +20,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-
-    private final CustomUserDetailsService customUserDetailsService;
-
-
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-
 
     private final JwtRequestFilter jwtRequestFilter;
 
     @Autowired
-    public SecurityConfig(CustomUserDetailsService customUserDetailsService, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, JwtRequestFilter jwtRequestFilter) {
-        this.customUserDetailsService = customUserDetailsService;
+    public SecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, JwtRequestFilter jwtRequestFilter) {
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
         this.jwtRequestFilter = jwtRequestFilter;
     }

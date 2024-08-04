@@ -1,6 +1,5 @@
 package com.example.brewery.model;
 
-import com.example.brewery.dto.BreweryType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 

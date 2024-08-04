@@ -1,7 +1,6 @@
 package com.example.brewery.service;
 
 import com.example.brewery.dto.BreweryDto;
-import com.example.brewery.dto.BreweryType;
 import com.example.brewery.entity.AppUser;
 import com.example.brewery.entity.Favorite;
 import com.example.brewery.model.BreweryApiResponse;
