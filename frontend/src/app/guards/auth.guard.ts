@@ -25,7 +25,7 @@ export class AuthGuard implements CanActivate {
         if (
             currentUser &&
             currentUser.jwt &&
-            this.isTokenValid(currentUser.expiration)
+            AuthGuard.isTokenValid(currentUser.expiration)
         ) {
             return true;
         }
@@ -35,7 +35,7 @@ export class AuthGuard implements CanActivate {
         return false;
     }
 
-    private isTokenValid(expiration: string): boolean {
+    private static isTokenValid(expiration: string): boolean {
         const currentDate = new Date();
         const expirationDate = new Date(expiration);
         return expirationDate > currentDate;

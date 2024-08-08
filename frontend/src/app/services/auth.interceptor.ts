@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
     providedIn: 'root',
@@ -24,23 +24,24 @@ export class AuthInterceptor implements HttpInterceptor {
         request: HttpRequest<any>,
         next: HttpHandler
     ): Observable<HttpEvent<any>> {
-        let currentUser = this.authService.currentUserValue;
+        const currentUser = this.authService.currentUserValue;
+        let newRequest = request;
 
         if (currentUser && currentUser.jwt) {
-            request = this.addToken(request, currentUser.jwt);
+            newRequest = AuthInterceptor.addToken(request, currentUser.jwt);
         }
 
-        return next.handle(request).pipe(
+        return next.handle(newRequest).pipe(
             catchError((error: HttpErrorResponse) => {
                 if (error.status === 401) {
                     this.router.navigate(['/auth']);
                 }
-                return this.handleError(error);
+                return AuthInterceptor.handleError(error);
             })
         );
     }
 
-    private addToken(request: HttpRequest<any>, token: string) {
+    private static addToken(request: HttpRequest<any>, token: string) {
         return request.clone({
             setHeaders: {
                 Authorization: `Bearer ${token}`,
@@ -48,25 +49,23 @@ export class AuthInterceptor implements HttpInterceptor {
         });
     }
 
-    private handleError(error: HttpErrorResponse) {
+    private static handleError(error: HttpErrorResponse) {
         let errorMessage = 'An unknown error occurred!';
 
         if (error.error instanceof ErrorEvent) {
             // Client-side error
             errorMessage = `Error: ${error.error.message}`;
-        } else {
+        } else if (error.error && error.error.errors) {
             // Server-side error
-            if (error.error && error.error.errors) {
-                const validationErrors = error.error.errors
-                    .map(
-                        (err: any) =>
-                            `Field: ${err.field}, Error: ${err.error}, Value: ${err.value}`
-                    )
-                    .join('\n');
-                errorMessage = `Error Code: ${error.status}\nMessage: ${error.error.message}\n${validationErrors}`;
-            } else {
-                errorMessage = `Error Code: ${error.status}\nMessage: ${error.error.message || error.message}`;
-            }
+            const validationErrors = error.error.errors
+                .map(
+                    (err: any) =>
+                        `Field: ${err.field}, Error: ${err.error}, Value: ${err.value}`
+                )
+                .join('\n');
+            errorMessage = `Error Code: ${error.status}\nMessage: ${error.error.message}\n${validationErrors}`;
+        } else {
+            errorMessage = `Error Code: ${error.status}\nMessage: ${error.error.message || error.message}`;
         }
 
         return throwError(errorMessage);

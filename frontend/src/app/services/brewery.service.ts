@@ -65,7 +65,7 @@ export class BreweryService {
     }
 
     searchBreweries(name: string): Observable<Brewery[]> {
-        let params = new HttpParams().set('name', name);
+        const params = new HttpParams().set('name', name);
         return this.http.get<Brewery[]>(`${this.apiUrl}/breweries/search`, {
             params,
         });

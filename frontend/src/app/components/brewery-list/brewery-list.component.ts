@@ -32,7 +32,9 @@ export class BreweryListComponent implements OnInit, OnDestroy {
                     this.favoriteIdsSet = new Set(ids);
                 },
                 (error) => {
-                    this.notificationService.showError('Failed to load favorite IDs');
+                    this.notificationService.showError(
+                        'Failed to load favorite IDs'
+                    );
                 }
             )
         );
@@ -49,7 +51,9 @@ export class BreweryListComponent implements OnInit, OnDestroy {
                     this.favoriteIdsSet.add(id);
                 },
                 (error) => {
-                    this.notificationService.showError('Failed to add brewery to favorites');
+                    this.notificationService.showError(
+                        'Failed to add brewery to favorites'
+                    );
                 }
             )
         );
@@ -62,7 +66,9 @@ export class BreweryListComponent implements OnInit, OnDestroy {
                     this.favoriteIdsSet.delete(id);
                 },
                 (error) => {
-                    this.notificationService.showError('Failed to remove brewery from favorites');
+                    this.notificationService.showError(
+                        'Failed to remove brewery from favorites'
+                    );
                 }
             )
         );
