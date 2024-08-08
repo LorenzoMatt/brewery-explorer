@@ -47,6 +47,7 @@ export class BreweryDashboardComponent implements OnInit, OnDestroy {
 
                 this.breweries = [];
                 if (this.view === null || this.view === 'home') {
+                    this.view = 'home';
                     this.loadBreweries();
                 } else if (this.view === 'favorites') {
                     this.loadFavorites();
